@@ -45,32 +45,9 @@ public class UniteBehaviour : MonoBehaviour
 										estEnTrainDAttaquer = false;	
 								}
 						} else {
-								bool marche = true;
-								GameObject[] enemies = GameObject.FindGameObjectsWithTag (enemy_tag);
-								GameObject closest = null;
-								float closestDistance = 0;
-								foreach (GameObject enemy in enemies) {
-										float distance = System.Math.Abs (transform.position.x - enemy.transform.position.x);
-										UniteBehaviour otherBehaviour = enemy.GetComponent<UniteBehaviour> ();
-										if ((closest == null || closestDistance >= distance) && otherBehaviour.estVivant ()) {
-												closestDistance = distance;
-												closest = enemy;
-										}
-								}
-								if (closest != null) {
-										if (closestDistance <= portee) {
-												marche = false;
-												animator.SetTrigger ("attack");
-												estEnTrainDAttaquer = true;
-												UniteBehaviour other = closest.GetComponent<UniteBehaviour> ();
-												other.vie -= attaque;
-										}
-								}
-								if (marche) {
-										animator.SetBool ("idle", !peutAvancer);
-										if (peutAvancer) {
-												transform.Translate (Vector3.right * vitesse * Time.deltaTime);
-										}
+								var closest = EnemieLePlusProche ();
+								if (!AttaqueSiPossible (closest)) {
+										Marche ();
 								}
 						}
 						peutAvancer = true;
@@ -94,5 +71,44 @@ public class UniteBehaviour : MonoBehaviour
 				Object.Destroy (gameObject, 2);
 				Destroy (rigidbody2D);
 				Destroy (GetComponent<BoxCollider2D> ());
+		}
+
+		GameObject EnemieLePlusProche ()
+		{
+				GameObject[] enemies = GameObject.FindGameObjectsWithTag (enemy_tag);
+				GameObject closest = null;
+				float closestDistance = 0;
+				foreach (GameObject enemy in enemies) {
+						float distance = System.Math.Abs (transform.position.x - enemy.transform.position.x);
+						UniteBehaviour otherBehaviour = enemy.GetComponent<UniteBehaviour> ();
+						if ((closest == null || closestDistance >= distance) && otherBehaviour.estVivant ()) {
+								closestDistance = distance;
+								closest = enemy;
+						}
+				}
+				return closest;
+		}
+
+		bool AttaqueSiPossible (GameObject closest)
+		{
+				if (closest != null) {
+						float closestDistance = System.Math.Abs (transform.position.x - closest.transform.position.x);
+						if (closestDistance <= portee) {
+								animator.SetTrigger ("attack");
+								estEnTrainDAttaquer = true;
+								UniteBehaviour other = closest.GetComponent<UniteBehaviour> ();
+								other.vie -= attaque;
+								return true;
+						}
+				}
+				return false;
+		}
+
+		void Marche ()
+		{
+				animator.SetBool ("idle", !peutAvancer);
+				if (peutAvancer) {
+						transform.Translate (Vector3.right * vitesse * Time.deltaTime);
+				}
 		}
 }
