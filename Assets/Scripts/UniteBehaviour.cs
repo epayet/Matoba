@@ -14,6 +14,11 @@ public class UniteBehaviour : MonoBehaviour
 		private bool vivant = true;
 		private bool peutAvancer = true;
 
+		public bool estVivant ()
+		{
+				return vie > 0;
+		}
+
 		// Use this for initialization
 		void Start ()
 		{
@@ -34,9 +39,7 @@ public class UniteBehaviour : MonoBehaviour
 		{
 				if (vivant) {
 						if (vie <= 0) {
-								vivant = false;
-								animator.SetTrigger ("die");
-								Object.Destroy (gameObject, 2);
+								Mourir ();
 						} else if (estEnTrainDAttaquer) {
 								if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("Attack")) {
 										estEnTrainDAttaquer = false;	
@@ -48,7 +51,8 @@ public class UniteBehaviour : MonoBehaviour
 								float closestDistance = 0;
 								foreach (GameObject enemy in enemies) {
 										float distance = System.Math.Abs (transform.position.x - enemy.transform.position.x);
-										if (closest == null || closestDistance >= distance) {
+										UniteBehaviour otherBehaviour = enemy.GetComponent<UniteBehaviour> ();
+										if ((closest == null || closestDistance >= distance) && otherBehaviour.estVivant ()) {
 												closestDistance = distance;
 												closest = enemy;
 										}
@@ -81,5 +85,14 @@ public class UniteBehaviour : MonoBehaviour
 								peutAvancer = false;
 						}
 				}
+		}
+
+		void Mourir ()
+		{
+				vivant = false;
+				animator.SetTrigger ("die");
+				Object.Destroy (gameObject, 2);
+				Destroy (rigidbody2D);
+				Destroy (GetComponent<BoxCollider2D> ());
 		}
 }
