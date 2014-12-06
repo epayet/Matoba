@@ -12,9 +12,8 @@ public class UniteBehaviour : MonoBehaviour
 		private string enemy_tag;
 		private bool estEnTrainDAttaquer = false;
 		private bool vivant = true;
-		private bool peutAvancer = true;
 
-		public bool estVivant ()
+		public bool EstVivant ()
 		{
 				return vie > 0;
 		}
@@ -50,18 +49,8 @@ public class UniteBehaviour : MonoBehaviour
 										Marche ();
 								}
 						}
-						peutAvancer = true;
+						//peutAvancer = true;
 				} 
-		}
-
-		void OnCollisionStay2D (Collision2D other)
-		{
-				if (other.gameObject.tag == this.gameObject.tag) {
-						if (other.gameObject.transform.position.x < transform.position.x && !vaADroite ||
-								other.gameObject.transform.position.x > this.transform.position.x && vaADroite) {
-								peutAvancer = false;
-						}
-				}
 		}
 
 		void Mourir ()
@@ -81,7 +70,7 @@ public class UniteBehaviour : MonoBehaviour
 				foreach (GameObject enemy in enemies) {
 						float distance = System.Math.Abs (transform.position.x - enemy.transform.position.x);
 						UniteBehaviour otherBehaviour = enemy.GetComponent<UniteBehaviour> ();
-						if ((closest == null || closestDistance >= distance) && otherBehaviour.estVivant ()) {
+						if ((closest == null || closestDistance >= distance) && otherBehaviour.EstVivant ()) {
 								closestDistance = distance;
 								closest = enemy;
 						}
@@ -92,8 +81,7 @@ public class UniteBehaviour : MonoBehaviour
 		bool AttaqueSiPossible (GameObject closest)
 		{
 				if (closest != null) {
-						float closestDistance = System.Math.Abs (transform.position.x - closest.transform.position.x);
-						if (closestDistance <= portee) {
+						if (EstAPortee (closest)) {
 								animator.SetTrigger ("attack");
 								estEnTrainDAttaquer = true;
 								UniteBehaviour other = closest.GetComponent<UniteBehaviour> ();
@@ -104,11 +92,38 @@ public class UniteBehaviour : MonoBehaviour
 				return false;
 		}
 
+		bool EstAPortee (GameObject closest)
+		{
+				return closest.collider2D.bounds.SqrDistance (transform.position) <= portee * portee;
+		}
+
 		void Marche ()
 		{
+				bool peutAvancer = PeutAvancer ();
 				animator.SetBool ("idle", !peutAvancer);
 				if (peutAvancer) {
 						transform.Translate (Vector3.right * vitesse * Time.deltaTime);
 				}
+		}
+
+		bool PeutAvancer ()
+		{
+				GameObject prochaineUnite = null;
+				GameObject[] monEquipe = GameObject.FindGameObjectsWithTag (gameObject.tag);
+				foreach (GameObject unite in monEquipe) {
+						UniteBehaviour behaviour = unite.GetComponent<UniteBehaviour> ();
+						if (unite != gameObject && behaviour.EstVivant ()) {
+								if (unite.collider2D.bounds.Intersects (this.collider2D.bounds) && EstDevant (unite)) {
+										return false;
+								}
+						}
+				}
+				return true;
+		}
+
+		bool EstDevant (GameObject other)
+		{
+				return (vaADroite && this.transform.position.x < other.transform.position.x) ||
+						(!vaADroite && this.transform.position.x > other.transform.position.x);
 		}
 }
