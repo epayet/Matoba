@@ -6,12 +6,13 @@ public class UniteBehaviour : MonoBehaviour
 		private Animator animator;
 		public float vie = 10;
 		public float attaque;
-		public float portee = 1;
+		public float portee = 5;
 		public bool vaADroite;
 		public float vitesse;
 		private string enemy_tag;
 		private bool estEnTrainDAttaquer = false;
 		private bool vivant = true;
+		private bool peutAvancer = true;
 
 		// Use this for initialization
 		void Start ()
@@ -31,13 +32,12 @@ public class UniteBehaviour : MonoBehaviour
 		// Update is called once per frame
 		void Update ()
 		{
-			if (vivant) {
-					if(vie <= 0) {
-				vivant = false;
-				animator.SetTrigger("die");
-				Object.Destroy(gameObject, 2);
-			}
-						else if (estEnTrainDAttaquer) {
+				if (vivant) {
+						if (vie <= 0) {
+								vivant = false;
+								animator.SetTrigger ("die");
+								Object.Destroy (gameObject, 2);
+						} else if (estEnTrainDAttaquer) {
 								if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("Attack")) {
 										estEnTrainDAttaquer = false;	
 								}
@@ -58,14 +58,28 @@ public class UniteBehaviour : MonoBehaviour
 												marche = false;
 												animator.SetTrigger ("attack");
 												estEnTrainDAttaquer = true;
-						UniteBehaviour other = closest.GetComponent<UniteBehaviour>();
-						other.vie -= attaque;
+												UniteBehaviour other = closest.GetComponent<UniteBehaviour> ();
+												other.vie -= attaque;
 										}
 								}
 								if (marche) {
-										transform.Translate (Vector3.right * vitesse * Time.deltaTime);
+										animator.SetBool ("idle", !peutAvancer);
+										if (peutAvancer) {
+												transform.Translate (Vector3.right * vitesse * Time.deltaTime);
+										}
 								}
 						}
+						peutAvancer = true;
 				} 
+		}
+
+		void OnCollisionStay2D (Collision2D other)
+		{
+				if (other.gameObject.tag == this.gameObject.tag) {
+						if (other.gameObject.transform.position.x < transform.position.x && !vaADroite ||
+								other.gameObject.transform.position.x > this.transform.position.x && vaADroite) {
+								peutAvancer = false;
+						}
+				}
 		}
 }
