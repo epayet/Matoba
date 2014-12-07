@@ -3,19 +3,19 @@ using System.Collections;
 
 public class UniteBehaviour : EntityBehaviour
 {
-		private Animator animator;
 		public float attaque;
 		public float portee = 5;
 		public bool vaADroite;
 		public float vitesse;
-		private string enemy_tag;
-		private string base_enemy_tag;
-		private bool estEnTrainDAttaquer = false;
-		private bool vivant = true;
 		public GameObject attackOrigin;
 		public BaseBehaviour maBase;
 		public int prix;
 		public bool warrior;
+		private Animator animator;
+		private string enemy_tag;
+		private string base_enemy_tag;
+		private bool estEnTrainDAttaquer = false;
+		private bool vivant = true;
 
 		// Use this for initialization
 		public override void Start ()
@@ -80,7 +80,7 @@ public class UniteBehaviour : EntityBehaviour
 						animator.SetTrigger ("attack");
 						estEnTrainDAttaquer = true;
 						EntityBehaviour other = closest.GetComponent<EntityBehaviour> ();
-						other.RecoitAttaque (GetAttaque());
+						other.RecoitAttaque (GetAttaque ());
 						if (!other.EstVivant () && other is UniteBehaviour) {
 								maBase.argent += (int)((double)((UniteBehaviour)other).prix * 0.7 * maBase.prixRate);
 								maBase.xp += (int)((double)((UniteBehaviour)other).prix * 0.7 * maBase.xpRate);
