@@ -7,6 +7,7 @@ public class BaseBehaviour : EntityBehaviour
 		public int argent = 100;
 		public int xp;
 		public Text affichageArgent;
+		public Text affichageXp;
 		public ParticleSystem smokeWeed;
 		public int incomeRate = 5;
 		public float incomeTimeRate = 30;
@@ -42,6 +43,9 @@ public class BaseBehaviour : EntityBehaviour
 				}
 				if (affichageArgent != null) {
 						affichageArgent.text = argent.ToString ();		
+				}
+				if (affichageXp != null) {
+						affichageXp.text = xp.ToString ();		
 				}
 		}    
 }
