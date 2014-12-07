@@ -40,9 +40,11 @@ public class SpawnScript : MonoBehaviour
 		private void CreateUnit (GameObject unite, bool warrior)
 		{
 				int prix = unite.GetComponent<UniteBehaviour> ().prix;
+                Debug.Log(prix);
 				if (prix > maBase.argent) {
 						return;
 				}
+                maBase.argent -= prix;
 				GameObject archer = (GameObject)Instantiate (unite, gameObject.transform.position, gameObject.transform.rotation);
 				UniteBehaviour uniteBehaviour = archer.GetComponent<UniteBehaviour> ();
 				uniteBehaviour.vaADroite = !enemy;
