@@ -17,6 +17,11 @@ public class BaseBehaviour : EntityBehaviour
 		public float attackWarriorFactor = 1;
 		public float attackBowmanFactor = 1;
 		public float defenseUnites = 1;
+		public Text TextXp;
+	
+		public void DownXp(){
+			xp -= 100;
+		}
 
 		public override void Start ()
 		{
@@ -60,9 +65,14 @@ public class BaseBehaviour : EntityBehaviour
 				if (!EstVivant ())
 						perdu.aGagne (this);
 		}
+		
+		private void ShowCompetences(){
+			float pointcomp = Mathf.Floor (xp / 100);
+			TextXp.text = pointcomp.ToString().Substring(0, 1) + " XP";
+		}
 
-		void Update ()
-		{
+		void Update (){
+				ShowCompetences ();
 				lastRate += Time.deltaTime;		
 				if (lastRate >= incomeTimeRate) {
 						lastRate = 0;
@@ -70,9 +80,6 @@ public class BaseBehaviour : EntityBehaviour
 				}
 				if (affichageArgent != null) {
 						affichageArgent.text = argent.ToString ();		
-				}
-				if (affichageXp != null) {
-						affichageXp.text = xp.ToString ();		
 				}
 		}    
 }
