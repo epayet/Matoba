@@ -26,7 +26,7 @@ public class BaseBehaviour : EntityBehaviour
 
 		void Update ()
 		{
-				if (affichageArgent) {
+				if (affichageArgent != null) {
 						affichageArgent.text = argent.ToString ();		
 				}
 		}    
