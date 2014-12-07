@@ -9,15 +9,17 @@ public class UniteBehaviour : EntityBehaviour
 		public bool vaADroite;
 		public float vitesse;
 		private string enemy_tag;
-        private string base_enemy_tag;
+		private string base_enemy_tag;
 		private bool estEnTrainDAttaquer = false;
 		private bool vivant = true;
 		public GameObject attackOrigin;
+		public BaseBehaviour maBase;
+		public int prix;
 
 		// Use this for initialization
 		public override void Start ()
 		{
-            base.Start();
+				base.Start ();
 				animator = GetComponentInChildren<Animator> ();
 				if (!vaADroite) {
 						vitesse = -vitesse;
@@ -26,7 +28,7 @@ public class UniteBehaviour : EntityBehaviour
 						animator.gameObject.transform.localScale = scale;
 				}
 				enemy_tag = "unit_team_" + (vaADroite ? "2" : "1");
-                base_enemy_tag = "base_team_" + (vaADroite ? "2" : "1");
+				base_enemy_tag = "base_team_" + (vaADroite ? "2" : "1");
 		}
 
 		// Update is called once per frame
@@ -62,10 +64,10 @@ public class UniteBehaviour : EntityBehaviour
 				foreach (var raycastHit2D in Physics2D.RaycastAll (attackOrigin.transform.position, vaADroite ? Vector2.right : Vector2.right * (-1), portee)) {
 						var enemyGameObject = raycastHit2D.collider.gameObject;
 						if (enemyGameObject.tag == enemy_tag || enemyGameObject.tag == base_enemy_tag) {
-                            EntityBehaviour enemyBehaviour = enemyGameObject.GetComponent<EntityBehaviour>();
-							if (enemyBehaviour.EstVivant ()) {
-									return enemyGameObject;
-							}
+								EntityBehaviour enemyBehaviour = enemyGameObject.GetComponent<EntityBehaviour> ();
+								if (enemyBehaviour.EstVivant ()) {
+										return enemyGameObject;
+								}
 						}
 				}
 				return null;
@@ -76,8 +78,11 @@ public class UniteBehaviour : EntityBehaviour
 				if (closest != null) {
 						animator.SetTrigger ("attack");
 						estEnTrainDAttaquer = true;
-                        EntityBehaviour other = closest.GetComponent<EntityBehaviour>();
-                        other.RecoitAttaque(attaque);
+						EntityBehaviour other = closest.GetComponent<EntityBehaviour> ();
+						other.RecoitAttaque (attaque);
+						if (!other.EstVivant () && other is UniteBehaviour) {
+								maBase.argent += (int) ((double)((UniteBehaviour)other).prix * 0.7);
+						}
 						return true;
 						
 				}
@@ -95,20 +100,20 @@ public class UniteBehaviour : EntityBehaviour
 
 		bool PeutAvancer ()
 		{
-            if (perdu.aPerdu)
-                return false;
+				if (perdu.aPerdu)
+						return false;
 
-			GameObject prochaineUnite = null;
-			GameObject[] monEquipe = GameObject.FindGameObjectsWithTag (gameObject.tag);
-			foreach (GameObject unite in monEquipe) {
-					UniteBehaviour behaviour = unite.GetComponent<UniteBehaviour> ();
-					if (unite != gameObject && behaviour.EstVivant ()) {
-							if (unite.collider2D.bounds.Intersects (this.collider2D.bounds) && EstDevant (unite)) {
-									return false;
-							}
-					}
-			}
-			return true;
+				GameObject prochaineUnite = null;
+				GameObject[] monEquipe = GameObject.FindGameObjectsWithTag (gameObject.tag);
+				foreach (GameObject unite in monEquipe) {
+						UniteBehaviour behaviour = unite.GetComponent<UniteBehaviour> ();
+						if (unite != gameObject && behaviour.EstVivant ()) {
+								if (unite.collider2D.bounds.Intersects (this.collider2D.bounds) && EstDevant (unite)) {
+										return false;
+								}
+						}
+				}
+				return true;
 		}
 
 		bool EstDevant (GameObject other)
@@ -116,9 +121,4 @@ public class UniteBehaviour : EntityBehaviour
 				return (vaADroite && this.transform.position.x < other.transform.position.x) ||
 						(!vaADroite && this.transform.position.x > other.transform.position.x);
 		}
-
-        //internal override void RecoitAttaque(float attaque)
-        //{
-        //    base.RecoitAttaque(attaque);
-        //}
 }
