@@ -21,20 +21,18 @@ public class UniteBehaviour : MonoBehaviour
 		// Use this for initialization
 		void Start ()
 		{
-				animator = GetComponent<Animator> ();
+				animator = GetComponentInChildren<Animator> ();
 				if (!vaADroite) {
 						vitesse = -vitesse;
-						float factorX = -transform.localScale.x;
-
-						Vector3 scale = transform.localScale;
-						scale.x = factorX;
-						transform.localScale = scale;
+						Vector3 scale = animator.gameObject.transform.localScale;
+						scale.x = -scale.x;
+						animator.gameObject.transform.localScale = scale;
 				}
 				enemy_tag = "unit_team_" + (vaADroite ? "2" : "1");
 		}
 
 		// Update is called once per frame
-		void Update ()
+		void FixedUpdate ()
 		{
 				if (vivant) {
 						if (vie <= 0) {
@@ -49,7 +47,6 @@ public class UniteBehaviour : MonoBehaviour
 										Marche ();
 								}
 						}
-						//peutAvancer = true;
 				} 
 		}
 
