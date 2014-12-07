@@ -9,7 +9,7 @@ public class BaseBehaviour : EntityBehaviour
 		public Text affichageArgent;
 		public Text affichageXp;
 		public ParticleSystem smokeWeed;
-		public int incomeRate = 5;
+		public float incomeRate = 5;
 		public float incomeTimeRate = 30;
 		public float xpRate = 1;
 		public float prixRate = 1;
@@ -20,8 +20,35 @@ public class BaseBehaviour : EntityBehaviour
 
 		public override void Start ()
 		{
-				base.Start ();
-				smokeWeed.Stop ();
+			base.Start ();
+			smokeWeed.Stop ();
+		}
+		
+		public void setVieBase(float s){
+			vieDebut = vieDebut * s;
+		}
+		public void setXpRate(float s){
+			xpRate = s;
+		}
+	
+		public void setPrixRate(float s){
+			prixRate = s;
+		}
+
+		public void setIncomeRate(float s){
+			incomeRate = s;
+		}
+		
+		public void setAttackWarriorFactor(float s){
+			attackWarriorFactor = s;
+		}
+		
+		public void setAttackBowmanFactor(float s){
+			attackBowmanFactor = s;
+		}
+		
+		public void setDefenseUnites(float s){
+			defenseUnites = s;
 		}
 
 		internal override void RecoitAttaque (float attaque)
