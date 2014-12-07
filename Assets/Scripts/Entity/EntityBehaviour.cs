@@ -5,6 +5,12 @@ public abstract class EntityBehaviour : MonoBehaviour {
 
     public float vie = 10;
     public Perdu perdu;
+    private float vieDebut;
+
+    public virtual void Start()
+    {
+        vieDebut = vie;
+    }
 
     internal bool EstVivant()
     {
@@ -14,6 +20,8 @@ public abstract class EntityBehaviour : MonoBehaviour {
     internal virtual void RecoitAttaque(float attaque)
     {
         vie -= attaque;
+        BarreDeVie barreDeVie = gameObject.GetComponentInChildren<BarreDeVie>();
+        barreDeVie.updateScale(vie, vieDebut);
     }
 
     public int GetTeam()
