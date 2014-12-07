@@ -32,7 +32,7 @@ public class UniteBehaviour : EntityBehaviour
 		}
 
 		// Update is called once per frame
-		void FixedUpdate ()
+		void Update ()
 		{
 				if (vivant) {
 						if (vie <= 0) {
