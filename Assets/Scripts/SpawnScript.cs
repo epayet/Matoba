@@ -29,7 +29,7 @@ public class SpawnScript : MonoBehaviour
 
 		public void CreateGobelin ()
 		{
-				CreateUnit (ArcherPrefab, false);
+				CreateUnit (ArcherGobelinPrefab, false);
 		}
 
 		public void CreateWarrior ()

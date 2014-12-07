@@ -1,21 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IA : MonoBehaviour {
+public class IA : MonoBehaviour
+{
 
-	private float time;
+		private float time = 0;
 
-	// Use this for initialization
-	void Start () {
+		// Use this for initialization
+		void Start ()
+		{
 	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		time += Time.deltaTime;
-		if (time > 5) {
-			gameObject.GetComponent<SpawnScript> ().CreateArcher ();
-			time = 0;
 		}
-	}
+	
+		// Update is called once per frame
+		void Update ()
+		{
+				time -= Time.deltaTime;
+				if (time <= 0.0) {
+						time = Random.Range (2, 15);
+						if (Random.Range ((float)0.0, (float)1.0) > 0.5) {
+								gameObject.GetComponent<SpawnScript> ().CreateOrc ();
+						} else {
+								gameObject.GetComponent<SpawnScript> ().CreateGobelin ();
+						}
+				}
+		}
 }
