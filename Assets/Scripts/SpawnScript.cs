@@ -17,7 +17,7 @@ public class SpawnScript : MonoBehaviour
 		private void CreateUnit (GameObject unite)
 		{
 				int prix = unite.GetComponent<UniteBehaviour> ().prix;
-				if (prix < maBase.argent) {
+				if (prix > maBase.argent) {
 						return;
 				}
 				GameObject archer = (GameObject)Instantiate (unite, gameObject.transform.position, gameObject.transform.rotation);
