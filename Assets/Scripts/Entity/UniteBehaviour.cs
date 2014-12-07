@@ -95,7 +95,7 @@ public class UniteBehaviour : EntityBehaviour
 
 		bool PeutAvancer ()
 		{
-            if (perdu.aPerdu)
+            if (perdu.fini)
                 return false;
 
 			GameObject prochaineUnite = null;
