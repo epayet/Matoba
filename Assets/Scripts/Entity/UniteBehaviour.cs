@@ -81,7 +81,7 @@ public class UniteBehaviour : EntityBehaviour
 						EntityBehaviour other = closest.GetComponent<EntityBehaviour> ();
 						other.RecoitAttaque (attaque);
 						if (!other.EstVivant () && other is UniteBehaviour) {
-								maBase.argent += (int) ((double)((UniteBehaviour)other).prix * 0.7);
+								maBase.argent += (int)((double)((UniteBehaviour)other).prix * 0.7);
 						}
 						return true;
 						
@@ -100,7 +100,8 @@ public class UniteBehaviour : EntityBehaviour
 
 		bool PeutAvancer ()
 		{
-				if (perdu.aPerdu)
+
+				if (perdu.fini)
 						return false;
 
 				GameObject prochaineUnite = null;

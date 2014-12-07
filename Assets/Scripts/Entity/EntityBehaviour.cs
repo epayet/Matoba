@@ -5,7 +5,7 @@ public abstract class EntityBehaviour : MonoBehaviour {
 
     public float vie = 10;
     public Perdu perdu;
-    private float vieDebut;
+    protected float vieDebut;
 
     public virtual void Start()
     {
