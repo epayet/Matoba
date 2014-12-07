@@ -7,6 +7,9 @@ public class BaseBehaviour : EntityBehaviour
 		public int argent = 100;
 		public Text affichageArgent;
 		public ParticleSystem smokeWeed;
+		public int incomeRate = 5;
+		public float incomeTimeRate = 30;
+		private float lastRate = 0;
 
 		public override void Start ()
 		{
@@ -26,6 +29,11 @@ public class BaseBehaviour : EntityBehaviour
 
 		void Update ()
 		{
+				lastRate += Time.deltaTime;		
+				if (lastRate >= incomeTimeRate) {
+						lastRate = 0;
+						argent += (int)((incomeRate * 0.01) * argent);
+				}
 				if (affichageArgent != null) {
 						affichageArgent.text = argent.ToString ();		
 				}
