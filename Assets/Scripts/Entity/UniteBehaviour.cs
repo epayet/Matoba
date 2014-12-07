@@ -15,6 +15,7 @@ public class UniteBehaviour : EntityBehaviour
 		public GameObject attackOrigin;
 		public BaseBehaviour maBase;
 		public int prix;
+		public bool warrior;
 
 		// Use this for initialization
 		public override void Start ()
@@ -79,14 +80,21 @@ public class UniteBehaviour : EntityBehaviour
 						animator.SetTrigger ("attack");
 						estEnTrainDAttaquer = true;
 						EntityBehaviour other = closest.GetComponent<EntityBehaviour> ();
-						other.RecoitAttaque (attaque);
+						other.RecoitAttaque (GetAttaque());
 						if (!other.EstVivant () && other is UniteBehaviour) {
-								maBase.argent += (int)((double)((UniteBehaviour)other).prix * 0.7);
+								maBase.argent += (int)((double)((UniteBehaviour)other).prix * 0.7 * maBase.prixRate);
+								maBase.xp += (int)((double)((UniteBehaviour)other).prix * 0.7 * maBase.xpRate);
 						}
 						return true;
 						
 				}
 				return false;
+		}
+
+		private float GetAttaque ()
+		{
+				float factor = warrior ? maBase.attackWarriorFactor : maBase.attackBowmanFactor;
+				return attaque * factor;
 		}
 
 		void Marche ()
@@ -121,5 +129,10 @@ public class UniteBehaviour : EntityBehaviour
 		{
 				return (vaADroite && this.transform.position.x < other.transform.position.x) ||
 						(!vaADroite && this.transform.position.x > other.transform.position.x);
+		}
+
+		internal override void RecoitAttaque (float attaque)
+		{
+				base.RecoitAttaque (attaque / maBase.defenseUnites);
 		}
 }
