@@ -38,11 +38,7 @@ public class UniteBehaviour : EntityBehaviour
 				if (vivant) {
 						if (vie <= 0) {
 								Mourir ();
-						} else if (estEnTrainDAttaquer) {
-								if (!animator.GetCurrentAnimatorStateInfo (0).IsName ("Attack")) {
-										estEnTrainDAttaquer = false;	
-								}
-						} else {
+						} else if (!estEnTrainDAttaquer) {
 								var closest = EnemieLePlusProche ();
 								if (!AttaqueSiPossible (closest)) {
 										Marche ();
@@ -134,5 +130,10 @@ public class UniteBehaviour : EntityBehaviour
 		internal override void RecoitAttaque (float attaque)
 		{
 				base.RecoitAttaque (attaque / maBase.defenseUnites);
+		}
+
+		public void AttaqueFinie ()
+		{
+				estEnTrainDAttaquer = false;
 		}
 }
