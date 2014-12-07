@@ -7,7 +7,12 @@ public class SpawnScript : MonoBehaviour
 		public GameObject ArcherPrefab;
 		public Perdu perdu;
 		public bool enemy;
-		public BaseBehaviour maBase;
+		private BaseBehaviour maBase;
+
+		void Start ()
+		{
+				maBase = GetComponentInParent<BaseBehaviour> ();
+		}
 
 		public void CreateArcher ()
 		{
@@ -24,6 +29,7 @@ public class SpawnScript : MonoBehaviour
 				UniteBehaviour uniteBehaviour = archer.GetComponent<UniteBehaviour> ();
 				uniteBehaviour.vaADroite = !enemy;
 				uniteBehaviour.perdu = perdu;
+				uniteBehaviour.maBase = maBase;
 				archer.tag = enemy ? "unit_team_2" : "unit_team_1";
 		}
 }
