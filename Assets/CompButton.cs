@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class CompButton : MonoBehaviour {
 	Text instruction;
 	public Button Suiv;
+	public GameObject player;
 	public bool isActiveBase;
 	public Text Inf;
 
