@@ -12,6 +12,7 @@ public class UniteBehaviour : MonoBehaviour
 		private string enemy_tag;
 		private bool estEnTrainDAttaquer = false;
 		private bool vivant = true;
+		public GameObject attackOrigin;
 
 		public bool EstVivant ()
 		{
@@ -61,37 +62,29 @@ public class UniteBehaviour : MonoBehaviour
 
 		GameObject EnemieLePlusProche ()
 		{
-				GameObject[] enemies = GameObject.FindGameObjectsWithTag (enemy_tag);
-				GameObject closest = null;
-				float closestDistance = 0;
-				foreach (GameObject enemy in enemies) {
-						float distance = System.Math.Abs (transform.position.x - enemy.transform.position.x);
-						UniteBehaviour otherBehaviour = enemy.GetComponent<UniteBehaviour> ();
-						if ((closest == null || closestDistance >= distance) && otherBehaviour.EstVivant ()) {
-								closestDistance = distance;
-								closest = enemy;
+				foreach (var raycastHit2D in Physics2D.RaycastAll (attackOrigin.transform.position, vaADroite ? Vector2.right : Vector2.right * (-1), portee)) {
+						var enemyGameObject = raycastHit2D.collider.gameObject;
+						if (enemyGameObject.tag == enemy_tag) {
+								UniteBehaviour enemyBehaviour = enemyGameObject.GetComponent<UniteBehaviour> ();
+								if (enemyBehaviour.EstVivant ()) {
+										return enemyGameObject;
+								}
 						}
 				}
-				return closest;
+				return null;
 		}
 
 		bool AttaqueSiPossible (GameObject closest)
 		{
 				if (closest != null) {
-						if (EstAPortee (closest)) {
-								animator.SetTrigger ("attack");
-								estEnTrainDAttaquer = true;
-								UniteBehaviour other = closest.GetComponent<UniteBehaviour> ();
-								other.vie -= attaque;
-								return true;
-						}
+						animator.SetTrigger ("attack");
+						estEnTrainDAttaquer = true;
+						UniteBehaviour other = closest.GetComponent<UniteBehaviour> ();
+						other.vie -= attaque;
+						return true;
+						
 				}
 				return false;
-		}
-
-		bool EstAPortee (GameObject closest)
-		{
-				return closest.collider2D.bounds.SqrDistance (transform.position) <= portee * portee;
 		}
 
 		void Marche ()
