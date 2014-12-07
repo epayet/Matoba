@@ -5,11 +5,17 @@ using System.Collections;
 public class BaseBehaviour : EntityBehaviour
 {
 		public int argent = 100;
+		public int xp;
 		public Text affichageArgent;
 		public ParticleSystem smokeWeed;
 		public int incomeRate = 5;
 		public float incomeTimeRate = 30;
+		public float xpRate = 1;
+		public float prixRate = 1;
 		private float lastRate = 0;
+		public float attackWarriorFactor = 1;
+		public float attackBowmanFactor = 1;
+		public float defenseUnites = 1;
 
 		public override void Start ()
 		{
