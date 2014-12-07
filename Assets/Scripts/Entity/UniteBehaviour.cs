@@ -15,8 +15,9 @@ public class UniteBehaviour : EntityBehaviour
 		public GameObject attackOrigin;
 
 		// Use this for initialization
-		void Start ()
+		public override void Start ()
 		{
+            base.Start();
 				animator = GetComponentInChildren<Animator> ();
 				if (!vaADroite) {
 						vitesse = -vitesse;
