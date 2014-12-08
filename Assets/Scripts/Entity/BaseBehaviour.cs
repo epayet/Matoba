@@ -19,41 +19,50 @@ public class BaseBehaviour : EntityBehaviour
 		public float defenseUnites = 1;
 		public Text TextXp;
 	
-		public void DownXp(){
-			xp -= 100;
+		public void DownXp ()
+		{
+				xp -= 100;
 		}
 
 		public override void Start ()
 		{
-			base.Start ();
-			smokeWeed.Stop ();
+				base.Start ();
+				smokeWeed.Stop ();
 		}
 		
-		public void setVieBase(float s){
-			vieDebut = vieDebut * s;
-		}
-		public void setXpRate(float s){
-			xpRate = s;
-		}
-	
-		public void setPrixRate(float s){
-			prixRate = s;
+		public void setVieBase (float s)
+		{
+				vieDebut = vieDebut * s;
 		}
 
-		public void setIncomeRate(float s){
-			incomeRate = s;
+		public void setXpRate (float s)
+		{
+				xpRate = s;
+		}
+	
+		public void setPrixRate (float s)
+		{
+				prixRate = s;
+		}
+
+		public void setIncomeRate (float s)
+		{
+				incomeRate = s;
 		}
 		
-		public void setAttackWarriorFactor(float s){
-			attackWarriorFactor = s;
+		public void setAttackWarriorFactor (float s)
+		{
+				attackWarriorFactor = s;
 		}
 		
-		public void setAttackBowmanFactor(float s){
-			attackBowmanFactor = s;
+		public void setAttackBowmanFactor (float s)
+		{
+				attackBowmanFactor = s;
 		}
 		
-		public void setDefenseUnites(float s){
-			defenseUnites = s;
+		public void setDefenseUnites (float s)
+		{
+				defenseUnites = s;
 		}
 
 		internal override void RecoitAttaque (float attaque)
@@ -66,17 +75,21 @@ public class BaseBehaviour : EntityBehaviour
 						perdu.aGagne (this);
 		}
 		
-		private void ShowCompetences(){
-			float pointcomp = Mathf.Floor (xp / 100);
-			TextXp.text = pointcomp.ToString().Substring(0, 1) + " XP";
+		private void ShowCompetences ()
+		{
+				if (TextXp != null) {
+						TextXp.text = System.Math.Floor((double)xp/100).ToString () + " XP";	
+					
+				}
 		}
 
-		void Update (){
+		void Update ()
+		{
 				ShowCompetences ();
 				lastRate += Time.deltaTime;		
 				if (lastRate >= incomeTimeRate) {
 						lastRate = 0;
-						argent += (int)((incomeRate * 0.01) * argent);
+						argent += (int)((incomeRate * 0.3) * argent);
 				}
 				if (affichageArgent != null) {
 						affichageArgent.text = argent.ToString ();		

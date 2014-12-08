@@ -14,7 +14,7 @@ public class UniteBehaviour : EntityBehaviour
 		private Animator animator;
 		private string enemy_tag;
 		private string base_enemy_tag;
-		private bool estEnTrainDAttaquer = false;
+		private float lastAttack = 0;
 		private bool vivant = true;
 
 		// Use this for initialization
@@ -36,6 +36,9 @@ public class UniteBehaviour : EntityBehaviour
 		// Update is called once per frame
 		void Update ()
 		{
+				lastAttack -= Time.deltaTime;
+				bool 
+				estEnTrainDAttaquer = lastAttack > 0;
 				if (vivant) {
 						if (vie <= 0) {
 								Mourir ();
@@ -75,9 +78,9 @@ public class UniteBehaviour : EntityBehaviour
 		{
 				if (closest != null) {
 						animator.SetTrigger ("attack");
-						estEnTrainDAttaquer = true;
 						EntityBehaviour other = closest.GetComponent<EntityBehaviour> ();
 						other.RecoitAttaque (GetAttaque ());
+						lastAttack = 1;
 						if (!other.EstVivant () && other is UniteBehaviour) {
 								maBase.argent += (int)((double)((UniteBehaviour)other).prix * 0.7 * maBase.prixRate);
 								maBase.xp += (int)((double)((UniteBehaviour)other).prix * 0.7 * maBase.xpRate);
@@ -109,7 +112,6 @@ public class UniteBehaviour : EntityBehaviour
 				if (perdu.fini)
 						return false;
 
-				GameObject prochaineUnite = null;
 				GameObject[] monEquipe = GameObject.FindGameObjectsWithTag (gameObject.tag);
 				foreach (GameObject unite in monEquipe) {
 						UniteBehaviour behaviour = unite.GetComponent<UniteBehaviour> ();
@@ -135,6 +137,6 @@ public class UniteBehaviour : EntityBehaviour
 
 		public void AttaqueFinie ()
 		{
-				estEnTrainDAttaquer = false;
+				Debug.LogWarning ("Attack end");
 		}
 }

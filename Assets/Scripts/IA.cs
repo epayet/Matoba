@@ -17,7 +17,7 @@ public class IA : MonoBehaviour
 		{
 				time -= Time.deltaTime;
 				if (time <= 0.0) {
-						time = Random.Range (2, 15);
+						time = Random.Range (1, 5);
 						if (Random.Range ((float)0.0, (float)1.0) > 0.5) {
 								gameObject.GetComponent<SpawnScript> ().CreateOrc ();
 						} else {
